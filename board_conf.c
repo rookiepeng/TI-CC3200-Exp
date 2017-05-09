@@ -8,6 +8,7 @@
 #include <rom_map.h>
 #include <interrupt.h>
 #include <prcm.h>
+#include <gpio.h>
 
 #include "board_conf.h"
 
@@ -39,4 +40,122 @@ void BoardInit(void)
     MAP_IntEnable(FAULT_SYSTICK);
 
     PRCMCC3200MCUInit();
+}
+
+void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
+{
+    //SW3
+    //
+    // Set Interrupt Type for GPIO
+    //
+    MAP_GPIOIntTypeSet(GPIOA1_BASE, GPIO_PIN_5, GPIO_FALLING_EDGE);
+
+//g_S3InterruptHdl = S3InterruptHdl;
+
+//
+// Register Interrupt handler
+//
+#if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
+    // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
+    // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
+    // SL_PLATFORM_MULTI_THREADED: if app uses any OS + networking(simplelink)
+    osi_InterruptRegister(INT_GPIOA1, (P_OSI_INTR_ENTRY)SW3IntHandler,
+                          INT_PRIORITY_LVL_1);
+#else
+    MAP_IntPrioritySet(INT_GPIOA1, INT_PRIORITY_LVL_1);
+    MAP_GPIOIntRegister(GPIOA1_BASE, SW3IntHandler);
+#endif
+    //
+    // Enable Interrupt
+    //
+    MAP_GPIOIntClear(GPIOA1_BASE, GPIO_PIN_5);
+    MAP_GPIOIntEnable(GPIOA1_BASE, GPIO_INT_PIN_5);
+
+    //SW2
+    //
+    // Set Interrupt Type for GPIO
+    //
+    MAP_GPIOIntTypeSet(GPIOA2_BASE, GPIO_PIN_6, GPIO_FALLING_EDGE);
+
+//g_S2InterruptHdl = S2InterruptHdl;
+
+//
+// Register Interrupt handler
+//
+#if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
+    // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
+    // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
+    // SL_PLATFORM_MULTI_THREADED: if app uses any OS + networking(simplelink)
+    osi_InterruptRegister(INT_GPIOA2, (P_OSI_INTR_ENTRY)SW2IntHandler,
+                          INT_PRIORITY_LVL_1);
+#else
+    MAP_IntPrioritySet(INT_GPIOA2, INT_PRIORITY_LVL_1);
+    MAP_GPIOIntRegister(GPIOA2_BASE, SW2IntHandler);
+#endif
+
+    //
+    // Enable Interrupt
+    //
+    MAP_GPIOIntClear(GPIOA2_BASE, GPIO_PIN_6);
+    MAP_GPIOIntEnable(GPIOA2_BASE, GPIO_INT_PIN_6);
+}
+
+//*****************************************************************************
+//
+//!  \brief Enables Push Button GPIO Interrupt
+//!
+//! \param[in] ucSwitch               Push Button Swich Enum - SW2,SW3
+//!
+//! \return none
+//!
+//
+//*****************************************************************************
+void GPIO_IF_EnableInterrupt(unsigned char ucSwitch)
+{
+    if (ucSwitch & SW2)
+    {
+        //Enable GPIO Interrupt
+        MAP_GPIOIntClear(GPIOA2_BASE, GPIO_PIN_6);
+        MAP_IntPendClear(INT_GPIOA2);
+        MAP_IntEnable(INT_GPIOA2);
+        MAP_GPIOIntEnable(GPIOA2_BASE, GPIO_PIN_6);
+    }
+
+    if (ucSwitch & SW3)
+    {
+        //Enable GPIO Interrupt
+        MAP_GPIOIntClear(GPIOA1_BASE, GPIO_PIN_5);
+        MAP_IntPendClear(INT_GPIOA1);
+        MAP_IntEnable(INT_GPIOA1);
+        MAP_GPIOIntEnable(GPIOA1_BASE, GPIO_PIN_5);
+    }
+}
+
+//*****************************************************************************
+//
+//!  \brief Disables Push Button GPIO Interrupt
+//!
+//! \param[in] ucSwitch               Push Button Swich Enum - SW2,SW3
+//!
+//! \return none
+//!
+//
+//*****************************************************************************
+void GPIO_IF_DisableInterrupt(unsigned char ucSwitch)
+{
+    if (ucSwitch & SW2)
+    {
+        //Clear and Disable GPIO Interrupt
+        MAP_GPIOIntDisable(GPIOA2_BASE, GPIO_PIN_6);
+        MAP_GPIOIntClear(GPIOA2_BASE, GPIO_PIN_6);
+        MAP_IntDisable(INT_GPIOA2);
+    }
+
+    if (ucSwitch & SW3)
+    {
+        //Clear and Disable GPIO Interrupt
+        MAP_GPIOIntDisable(GPIOA1_BASE, GPIO_PIN_5);
+        MAP_GPIOIntClear(GPIOA1_BASE, GPIO_PIN_5);
+        MAP_IntDisable(INT_GPIOA1);
+    }
 }
