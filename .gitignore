@@ -38,3 +38,6 @@
 targetConfigs
 Release
 *.cmd
+.project
+.cproject
+.ccsproject
