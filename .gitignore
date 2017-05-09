@@ -39,3 +39,6 @@ targetConfigs
 Release
 Debug
 *.cmd
+.project
+.cproject
+.ccsproject
