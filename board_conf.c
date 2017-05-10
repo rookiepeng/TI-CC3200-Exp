@@ -1,3 +1,22 @@
+/*
+//    board_conf.c
+//
+//    Copyright (C) 2017  Zack (Zhengyu) Peng, https://zpeng.me
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <hw_types.h>
 #include <hw_memmap.h>
 #include <hw_common_reg.h>
@@ -44,17 +63,11 @@ void BoardInit(void)
 
 void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
 {
-    //SW3
-    //
+    // SW3
     // Set Interrupt Type for GPIO
-    //
     MAP_GPIOIntTypeSet(GPIOA1_BASE, GPIO_PIN_5, GPIO_FALLING_EDGE);
 
-//g_S3InterruptHdl = S3InterruptHdl;
-
-//
 // Register Interrupt handler
-//
 #if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
     // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
     // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
@@ -65,23 +78,16 @@ void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
     MAP_IntPrioritySet(INT_GPIOA1, INT_PRIORITY_LVL_1);
     MAP_GPIOIntRegister(GPIOA1_BASE, SW3IntHandler);
 #endif
-    //
+
     // Enable Interrupt
-    //
     MAP_GPIOIntClear(GPIOA1_BASE, GPIO_PIN_5);
     MAP_GPIOIntEnable(GPIOA1_BASE, GPIO_INT_PIN_5);
 
-    //SW2
-    //
+    // SW2
     // Set Interrupt Type for GPIO
-    //
     MAP_GPIOIntTypeSet(GPIOA2_BASE, GPIO_PIN_6, GPIO_FALLING_EDGE);
 
-//g_S2InterruptHdl = S2InterruptHdl;
-
-//
 // Register Interrupt handler
-//
 #if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
     // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
     // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
@@ -93,9 +99,7 @@ void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
     MAP_GPIOIntRegister(GPIOA2_BASE, SW2IntHandler);
 #endif
 
-    //
     // Enable Interrupt
-    //
     MAP_GPIOIntClear(GPIOA2_BASE, GPIO_PIN_6);
     MAP_GPIOIntEnable(GPIOA2_BASE, GPIO_INT_PIN_6);
 }

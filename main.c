@@ -1,3 +1,22 @@
+/*
+//    main.c
+//
+//    Copyright (C) 2017  Zack (Zhengyu) Peng, https://zpeng.me
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <hw_types.h>
 #include <hw_memmap.h>
 #include <hw_common_reg.h>
@@ -18,7 +37,6 @@
 void PushButtonHandlerSW2()
 {
     unsigned long ulPinState = GPIOIntStatus(GPIOA2_BASE, 1);
-    //MAP_GPIOIntClear(GPIOA2_BASE,GPIO_PIN_6);
     if (ulPinState & GPIO_PIN_6)
     {
         GPIO_IF_DisableInterrupt(SW2);
@@ -30,8 +48,6 @@ void PushButtonHandlerSW2()
 void PushButtonHandlerSW3()
 {
     unsigned long ulPinState = GPIOIntStatus(GPIOA1_BASE, 1);
-    //MAP_GPIOIntClear(GPIOA1_BASE,GPIO_PIN_5);
-
     if (ulPinState & GPIO_PIN_5)
     {
         GPIO_IF_DisableInterrupt(SW3);
@@ -46,11 +62,9 @@ void main(void)
     BoardInit(); // Initialize Board configurations
     PinMuxConfig();
 
-    //
     // configure LEDs
-    //
     GPIO_IF_LedConfigure(LED1 | LED2 | LED3);
-    GPIO_IF_LedOff(MCU_ALL_LED_IND);
+    //GPIO_IF_LedOff(MCU_ALL_LED_IND);
     //GPIO_IF_LedOn(MCU_ALL_LED_IND);
 
     //Initialize Push Botton Switch
@@ -63,6 +77,4 @@ void main(void)
     while (1)
     {
     }
-
-    //return 0;
 }

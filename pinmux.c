@@ -1,5 +1,5 @@
 //*****************************************************************************
-// pin_mux_config.c
+// pinmux.c
 //
 // configure the device pins for different signals
 //
@@ -78,26 +78,6 @@ void PinMuxConfig(void)
         MAP_PRCMPeripheralClkEnable(PRCM_ADC, PRCM_RUN_MODE_CLK);
         MAP_PRCMPeripheralClkEnable(PRCM_GPIOA1, PRCM_RUN_MODE_CLK);
         MAP_PRCMPeripheralClkEnable(PRCM_GPIOA2, PRCM_RUN_MODE_CLK);
-
-        //
-        // Configure PIN_57 for ADC0 ADC_CH0
-        //
-        MAP_PinTypeADC(PIN_57, PIN_MODE_255);
-
-        //
-        // Configure PIN_58 for ADC0 ADC_CH1
-        //
-        MAP_PinTypeADC(PIN_58, PIN_MODE_255);
-
-        //
-        // Configure PIN_59 for ADC0 ADC_CH2
-        //
-        MAP_PinTypeADC(PIN_59, PIN_MODE_255);
-
-        //
-        // Configure PIN_60 for ADC0 ADC_CH3
-        //
-        MAP_PinTypeADC(PIN_60, PIN_MODE_255);
 
         //
         // Configure PIN_64 for GPIO Output
