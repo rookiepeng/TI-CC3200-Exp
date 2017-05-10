@@ -1,7 +1,7 @@
 /*
 //    main.c
 //
-//    Copyright (C) 2017  Zack (Zhengyu) Peng, https://zpeng.me
+//    Copyright (C) 2017  Zach (Zhengyu) Peng, https://zpeng.me
 //
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
