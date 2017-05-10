@@ -1,3 +1,12 @@
+/*
+//  Copyright (C) 2017, Zach (Zhengyu) Peng, https://zpeng.me - All Rights Reserved
+//
+//  Unauthorized copying of this file, via any medium is strictly prohibited
+//  Proprietary and confidential
+//
+//  Written by Zach (Zhengyu) Peng <rookiepeng@gmail.com>, May 2017
+*/
+
 #include <stddef.h>
 
 #include <hw_adc.h>

@@ -1,5 +1,5 @@
 //*****************************************************************************
-// pin_mux_config.c
+// pinmux.c
 //
 // configure the device pins for different signals
 //
