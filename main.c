@@ -32,6 +32,8 @@
 
 unsigned long g_ucADCBuffPRI[ADC_BUFF_SIZE];
 unsigned long g_ucADCBuffALT[ADC_BUFF_SIZE];
+//UART_PRINT("\n\rbits[13:2] : ADC sample\n\r");
+//UART_PRINT("\n\rbits[31:14]: Time stamp of ADC sample \n\r");
 
 void PushButtonHandlerSW2()
 {

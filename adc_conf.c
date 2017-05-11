@@ -57,11 +57,21 @@ void InitAdcDma(unsigned long *g_ucADCBuffPRI, unsigned long *g_ucADCBuffALT, vo
                       (void *)(ADC_BASE + ADC_O_channel4FIFODATA), UDMA_SRC_INC_NONE,
                       (void *)&(g_ucADCBuffALT), UDMA_DST_INC_32);
 
-    ADCDMAEnable(ADC_BASE, ADC_CH_2);
-    ADCIntRegister(ADC_BASE, ADC_CH_2, ADCIntHandler);
-    Status = ADCIntStatus(ADC_BASE, ADC_CH_2);
-    ADCIntClear(ADC_BASE, ADC_CH_2, Status | ADC_DMA_DONE);
-    ADCIntEnable(ADC_BASE, ADC_CH_2, ADC_DMA_DONE);
-    ADCChannelEnable(ADC_BASE, ADC_CH_2);
-    ADCEnable(ADC_BASE);
+    MAP_ADCDMAEnable(ADC_BASE, ADC_CH_2);
+    MAP_ADCIntRegister(ADC_BASE, ADC_CH_2, ADCIntHandler);
+    Status = MAP_ADCIntStatus(ADC_BASE, ADC_CH_2);
+    MAP_ADCIntClear(ADC_BASE, ADC_CH_2, Status | ADC_DMA_DONE);
+    MAP_ADCIntEnable(ADC_BASE, ADC_CH_2, ADC_DMA_DONE);
+    MAP_ADCChannelEnable(ADC_BASE, ADC_CH_2);
+    //
+    // Configure ADC timer which is used to timestamp the ADC data samples
+    //
+    MAP_ADCTimerConfig(ADC_BASE,2^17);
+
+    //
+    // Enable ADC timer which is used to timestamp the ADC data samples
+    //
+    MAP_ADCTimerEnable(ADC_BASE);
+
+    MAP_ADCEnable(ADC_BASE);
 }
