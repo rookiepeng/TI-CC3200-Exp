@@ -1,10 +1,18 @@
 /*
-//  Copyright (C) 2017, Zach (Zhengyu) Peng, https://zpeng.me - All Rights Reserved
+//    Copyright (C) 2017  Zach (Zhengyu) Peng, https://zpeng.me
 //
-//  Unauthorized copying of this file, via any medium is strictly prohibited
-//  Proprietary and confidential
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
 //
-//  Written by Zach (Zhengyu) Peng <rookiepeng@gmail.com>, May 2017
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stddef.h>
@@ -36,7 +44,6 @@
 //unsigned long DmaDataDumpPing[640];
 //unsigned long DmaDataDumpPong[640];
 
-
 void InitAdcDma(unsigned long *g_ucADCBuffPRI, unsigned long *g_ucADCBuffALT, void (*ADCIntHandler)(void))
 {
     unsigned short Status;
@@ -66,7 +73,7 @@ void InitAdcDma(unsigned long *g_ucADCBuffPRI, unsigned long *g_ucADCBuffALT, vo
     //
     // Configure ADC timer which is used to timestamp the ADC data samples
     //
-    MAP_ADCTimerConfig(ADC_BASE,2^17);
+    MAP_ADCTimerConfig(ADC_BASE, 2 ^ 17);
 
     //
     // Enable ADC timer which is used to timestamp the ADC data samples

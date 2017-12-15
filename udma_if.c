@@ -3,35 +3,35 @@
 //
 // uDMA interface file
 //
-// Copyright (C) 2014 Texas Instruments Incorporated - http://www.ti.com/ 
-// 
-// 
-//  Redistribution and use in source and binary forms, with or without 
-//  modification, are permitted provided that the following conditions 
+// Copyright (C) 2014 Texas Instruments Incorporated - http://www.ti.com/
+//
+//
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions
 //  are met:
 //
-//    Redistributions of source code must retain the above copyright 
+//    Redistributions of source code must retain the above copyright
 //    notice, this list of conditions and the following disclaimer.
 //
 //    Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the 
-//    documentation and/or other materials provided with the   
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the
 //    distribution.
 //
 //    Neither the name of Texas Instruments Incorporated nor the names of
 //    its contributors may be used to endorse or promote products derived
 //    from this software without specific prior written permission.
 //
-//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
-//  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+//  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 //  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-//  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-//  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-//  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+//  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+//  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+//  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 //  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 //  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-//  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-//  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+//  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+//  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //*****************************************************************************
@@ -61,10 +61,9 @@
 
 #include "udma_if.h"
 
-
-#define MAX_NUM_CH              64  //32*2 entries
-#define CTL_TBL_SIZE            64  //32*2 entries
-#define UDMA_CH5_BITID          (1<<5)
+#define MAX_NUM_CH 64   //32*2 entries
+#define CTL_TBL_SIZE 64 //32*2 entries
+#define UDMA_CH5_BITID (1 << 5)
 
 //*****************************************************************************
 //                 GLOBAL VARIABLES -- Start
@@ -73,20 +72,19 @@ volatile unsigned char iDone;
 tAppCallbackHndl gfpAppCallbackHndl[MAX_NUM_CH];
 
 #if defined(gcc)
-tDMAControlTable gpCtlTbl[CTL_TBL_SIZE] __attribute__(( aligned(1024)));
+tDMAControlTable gpCtlTbl[CTL_TBL_SIZE] __attribute__((aligned(1024)));
 #endif
 #if defined(ccs)
 #pragma DATA_ALIGN(gpCtlTbl, 1024)
 tDMAControlTable gpCtlTbl[CTL_TBL_SIZE];
 #endif
 #if defined(ewarm)
-#pragma data_alignment=1024
+#pragma data_alignment = 1024
 tDMAControlTable gpCtlTbl[CTL_TBL_SIZE];
 #endif
 //*****************************************************************************
 //                 GLOBAL VARIABLES -- End
 //*****************************************************************************
-
 
 //*****************************************************************************
 //
@@ -100,8 +98,7 @@ tDMAControlTable gpCtlTbl[CTL_TBL_SIZE];
 //! \return None.
 //
 //*****************************************************************************
-void
-DmaSwIntHandler(void)
+void DmaSwIntHandler(void)
 {
     unsigned long uiIntStatus;
     iDone = 1;
@@ -121,8 +118,7 @@ DmaSwIntHandler(void)
 //! \return None.
 //
 //*****************************************************************************
-void
-DmaErrorIntHandler(void)
+void DmaErrorIntHandler(void)
 {
     MAP_uDMAIntClear(MAP_uDMAIntStatus());
 }
@@ -142,28 +138,28 @@ DmaErrorIntHandler(void)
 void UDMAInit()
 {
     unsigned int uiLoopCnt;
-	
+
     //
     // Enable McASP at the PRCM module
     //
-    MAP_PRCMPeripheralClkEnable(PRCM_UDMA,PRCM_RUN_MODE_CLK);
+    MAP_PRCMPeripheralClkEnable(PRCM_UDMA, PRCM_RUN_MODE_CLK);
     MAP_PRCMPeripheralReset(PRCM_UDMA);
 
-	//
+    //
     // Register interrupt handlers
     //
-#if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED) 
-	// USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
-	// USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
-	// SL_PLATFORM_MULTI_THREADED: if app uses any OS + networking(simplelink)
+#if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
+    // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
+    // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
+    // SL_PLATFORM_MULTI_THREADED: if app uses any OS + networking(simplelink)
     osi_InterruptRegister(INT_UDMA, DmaSwIntHandler, INT_PRIORITY_LVL_1);
     osi_InterruptRegister(INT_UDMAERR, DmaErrorIntHandler, INT_PRIORITY_LVL_1);
 #else
-	MAP_IntPrioritySet(INT_UDMA, INT_PRIORITY_LVL_1);
+    MAP_IntPrioritySet(INT_UDMA, INT_PRIORITY_LVL_1);
     MAP_uDMAIntRegister(UDMA_INT_SW, DmaSwIntHandler);
 
-	MAP_IntPrioritySet(INT_UDMAERR, INT_PRIORITY_LVL_1);
-	MAP_uDMAIntRegister(UDMA_INT_ERR, DmaErrorIntHandler);
+    MAP_IntPrioritySet(INT_UDMAERR, INT_PRIORITY_LVL_1);
+    MAP_uDMAIntRegister(UDMA_INT_ERR, DmaErrorIntHandler);
 #endif
 
     //
@@ -174,13 +170,13 @@ void UDMAInit()
     //
     // Set Control Table
     //
-    memset(gpCtlTbl,0,sizeof(tDMAControlTable)*CTL_TBL_SIZE);
+    memset(gpCtlTbl, 0, sizeof(tDMAControlTable) * CTL_TBL_SIZE);
     MAP_uDMAControlBaseSet(gpCtlTbl);
 
-	//
+    //
     // Reset App Callbacks
     //
-    for(uiLoopCnt = 0; uiLoopCnt < MAX_NUM_CH; uiLoopCnt++)
+    for (uiLoopCnt = 0; uiLoopCnt < MAX_NUM_CH; uiLoopCnt++)
     {
         gfpAppCallbackHndl[uiLoopCnt] = NULL;
     }
@@ -201,12 +197,12 @@ void UDMAInit()
 //*****************************************************************************
 void UDMAChannelSelect(unsigned int uiChannel, tAppCallbackHndl pfpAppCb)
 {
-    if((uiChannel & 0xFF) >= MAX_NUM_CH)
+    if ((uiChannel & 0xFF) >= MAX_NUM_CH)
     {
         return;
     }
     MAP_uDMAChannelAssign(uiChannel);
-    MAP_uDMAChannelAttributeDisable(uiChannel,UDMA_ATTR_ALTSELECT);
+    MAP_uDMAChannelAttributeDisable(uiChannel, UDMA_ATTR_ALTSELECT);
 
     gfpAppCallbackHndl[(uiChannel & 0xFF)] = pfpAppCb;
 }
@@ -252,14 +248,14 @@ void UDMASetupAutoMemTransfer(unsigned long ulChannel, void *pvSrcBuf,
 //
 //*****************************************************************************
 void UDMASetupPingPongTransfer(unsigned long ulChannel, void *pvSrcBuf1,
-                              void *pvDstBuf1, void *pvSrcBuf2,
-                              void *pvDstBuf2, unsigned long size)
+                               void *pvDstBuf1, void *pvSrcBuf2,
+                               void *pvDstBuf2, unsigned long size)
 {
     UDMASetupTransfer(ulChannel, UDMA_MODE_PINGPONG, size, UDMA_SIZE_8,
-                     UDMA_ARB_8, pvSrcBuf1, UDMA_SRC_INC_8,
-                     pvDstBuf1, UDMA_DST_INC_8);
+                      UDMA_ARB_8, pvSrcBuf1, UDMA_SRC_INC_8,
+                      pvDstBuf1, UDMA_DST_INC_8);
 
-    UDMASetupTransfer(ulChannel|UDMA_ALT_SELECT, UDMA_MODE_PINGPONG, size,
+    UDMASetupTransfer(ulChannel | UDMA_ALT_SELECT, UDMA_MODE_PINGPONG, size,
                       UDMA_SIZE_8, UDMA_ARB_8, pvSrcBuf2, UDMA_SRC_INC_8,
                       pvDstBuf2, UDMA_DST_INC_8);
 }
@@ -303,7 +299,6 @@ void UDMAStopTransfer(unsigned long ulChannel)
     //
     MAP_uDMAChannelDisable(ulChannel);
 }
-
 
 //*****************************************************************************
 //
@@ -351,13 +346,13 @@ void UDMADeInit()
 //
 //*****************************************************************************
 void UDMASetupTransfer(unsigned long ulChannel, unsigned long ulMode,
-                            unsigned long ulItemCount, unsigned long ulItemSize,
-                            unsigned long ulArbSize, void *pvSrcBuf,
-                            unsigned long ulSrcInc, void *pvDstBuf,
-                            unsigned long ulDstInc)
+                       unsigned long ulItemCount, unsigned long ulItemSize,
+                       unsigned long ulArbSize, void *pvSrcBuf,
+                       unsigned long ulSrcInc, void *pvDstBuf,
+                       unsigned long ulDstInc)
 {
     MAP_uDMAChannelControlSet(ulChannel, ulItemSize | ulSrcInc | ulDstInc | ulArbSize);
-    MAP_uDMAChannelAttributeEnable(ulChannel,UDMA_ATTR_USEBURST);
+    MAP_uDMAChannelAttributeEnable(ulChannel, UDMA_ATTR_USEBURST);
     MAP_uDMAChannelTransferSet(ulChannel, ulMode, pvSrcBuf, pvDstBuf, ulItemCount);
     MAP_uDMAChannelEnable(ulChannel);
 }
