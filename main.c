@@ -88,21 +88,23 @@ void ADCIntHandler()
         //ADCDisable(ADC_BASE);
         GPIO_IF_LedOn(MCU_ALL_LED_IND);
     }
-
-    ulMode = MAP_uDMAChannelModeGet(UDMA_CH16_ADC_CH2 | UDMA_ALT_SELECT);
-    if (ulMode == UDMA_MODE_STOP)
+    else
     {
-        //ulChannelStructIndex = UDMA_CH16_ADC_CH2 | UDMA_ALT_SELECT;
-        //pDataDumpBuff = &(g_ucADCBuffALT[0]);
-        //ADCDMADisable(ADC_BASE, ADC_CH_2);
-        //ADCIntDisable(ADC_BASE, ADC_CH_2, ADC_DMA_DONE);
-        //ADCDisable(ADC_BASE);
-        UDMASetupTransfer(UDMA_CH16_ADC_CH2 | UDMA_ALT_SELECT, UDMA_MODE_PINGPONG,
-                          ADC_BUFF_SIZE,
-                          UDMA_SIZE_32, UDMA_ARB_1,
-                          (void *)(ADC_BASE + ADC_O_channel4FIFODATA), UDMA_SRC_INC_NONE,
-                          (void *)&(g_ucADCBuffALT), UDMA_DST_INC_32);
-        GPIO_IF_LedOff(MCU_ALL_LED_IND);
+        ulMode = MAP_uDMAChannelModeGet(UDMA_CH16_ADC_CH2 | UDMA_ALT_SELECT);
+        if (ulMode == UDMA_MODE_STOP)
+        {
+            //ulChannelStructIndex = UDMA_CH16_ADC_CH2 | UDMA_ALT_SELECT;
+            //pDataDumpBuff = &(g_ucADCBuffALT[0]);
+            //ADCDMADisable(ADC_BASE, ADC_CH_2);
+            //ADCIntDisable(ADC_BASE, ADC_CH_2, ADC_DMA_DONE);
+            //ADCDisable(ADC_BASE);
+            UDMASetupTransfer(UDMA_CH16_ADC_CH2 | UDMA_ALT_SELECT, UDMA_MODE_PINGPONG,
+                              ADC_BUFF_SIZE,
+                              UDMA_SIZE_32, UDMA_ARB_1,
+                              (void *)(ADC_BASE + ADC_O_channel4FIFODATA), UDMA_SRC_INC_NONE,
+                              (void *)&(g_ucADCBuffALT), UDMA_DST_INC_32);
+            GPIO_IF_LedOff(MCU_ALL_LED_IND);
+        }
     }
 }
 
