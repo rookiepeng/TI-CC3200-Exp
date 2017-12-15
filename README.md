@@ -1,2 +1,7 @@
-# SPI DMA CC3200
-SPI with DMA example on TI's CC3200 WiFi chip.
+# SPI with uDMA Example
+
+SPI with uDMA example on TI SimpleLink CC3200.
+
+    Hardware: TI CC3200
+    IDE: TI Code Composer Studio (CCS)
+    SDK: CC3200SDK 1.3.0
