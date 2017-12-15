@@ -1,3 +1,7 @@
 # GPIO Interrupt Example
 
-Example of GPIO interrupt with TI SimpleLink CC3200.
+GPIO interrupt example with TI SimpleLink CC3200.
+
+    Hardware: TI CC3200
+    IDE: TI Code Composer Studio (CCS)
+    SDK: CC3200SDK 1.3.0
