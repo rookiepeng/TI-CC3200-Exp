@@ -1,46 +1,48 @@
 /*
-//    Copyright (C) 2017  Zach (Zhengyu) Peng, https://zpeng.me
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *   board_conf.c: board configuration
+ *
+ *   Copyright (C) 2017  Zhengyu Peng, https://zpeng.me
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include <hw_types.h>
-#include <hw_memmap.h>
-#include <hw_common_reg.h>
-#include <hw_ints.h>
-#include <hw_mcspi.h>
-#include <hw_udma.h>
-#include <rom.h>
-#include <rom_map.h>
-#include <interrupt.h>
-#include <prcm.h>
-#include <gpio.h>
+#include "hw_types.h"
+#include "hw_memmap.h"
+#include "hw_common_reg.h"
+#include "hw_ints.h"
+#include "hw_mcspi.h"
+#include "hw_udma.h"
+#include "rom.h"
+#include "rom_map.h"
+#include "interrupt.h"
+#include "prcm.h"
+#include "gpio.h"
 
 #include "board_conf.h"
 
-//*****************************************************************************
-//
-//! Board Initialization & Configuration
-//!
-//! \param  None
-//!
-//! \return None
-//
-//*****************************************************************************
+/*
+ * Board initialization & configuration
+ *
+ * \param
+ * none
+ *
+ * \return
+ * none
+ */
 void BoardInit(void)
 {
-/* In case of TI-RTOS vector table is initialize by OS itself */
+// In case of TI-RTOS vector table is initialize by OS itself
 #ifndef USE_TIRTOS
 
 // Set vector table base
@@ -59,19 +61,24 @@ void BoardInit(void)
     PRCMCC3200MCUInit();
 }
 
+/*
+ * GPIO interrupt initialization
+ *
+ * \param
+ * SW2IntHandler: switch 2 interrupt handler
+ * SW3IntHandler: switch 3 interrupt handler
+ *
+ * \return
+ * none
+ */
 void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
 {
-    //SW3
-    //
+    // SW3
+
     // Set Interrupt Type for GPIO
-    //
     MAP_GPIOIntTypeSet(GPIOA1_BASE, GPIO_PIN_5, GPIO_FALLING_EDGE);
 
-//g_S3InterruptHdl = S3InterruptHdl;
-
-//
 // Register Interrupt handler
-//
 #if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
     // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
     // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
@@ -82,23 +89,17 @@ void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
     MAP_IntPrioritySet(INT_GPIOA1, INT_PRIORITY_LVL_1);
     MAP_GPIOIntRegister(GPIOA1_BASE, SW3IntHandler);
 #endif
-    //
+
     // Enable Interrupt
-    //
     MAP_GPIOIntClear(GPIOA1_BASE, GPIO_PIN_5);
     MAP_GPIOIntEnable(GPIOA1_BASE, GPIO_INT_PIN_5);
 
     //SW2
-    //
+
     // Set Interrupt Type for GPIO
-    //
     MAP_GPIOIntTypeSet(GPIOA2_BASE, GPIO_PIN_6, GPIO_FALLING_EDGE);
 
-//g_S2InterruptHdl = S2InterruptHdl;
-
-//
 // Register Interrupt handler
-//
 #if defined(USE_TIRTOS) || defined(USE_FREERTOS) || defined(SL_PLATFORM_MULTI_THREADED)
     // USE_TIRTOS: if app uses TI-RTOS (either networking/non-networking)
     // USE_FREERTOS: if app uses Free-RTOS (either networking/non-networking)
@@ -110,23 +111,20 @@ void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
     MAP_GPIOIntRegister(GPIOA2_BASE, SW2IntHandler);
 #endif
 
-    //
     // Enable Interrupt
-    //
     MAP_GPIOIntClear(GPIOA2_BASE, GPIO_PIN_6);
     MAP_GPIOIntEnable(GPIOA2_BASE, GPIO_INT_PIN_6);
 }
 
-//*****************************************************************************
-//
-//!  \brief Enables Push Button GPIO Interrupt
-//!
-//! \param[in] ucSwitch               Push Button Swich Enum - SW2,SW3
-//!
-//! \return none
-//!
-//
-//*****************************************************************************
+/*
+ * Enables push button GPIO interrupt
+ *
+ * \param
+ * ucSwitch: Push Button Swich Enum - SW2,SW3
+ *
+ * \return
+ * none
+ */
 void GPIO_IF_EnableInterrupt(unsigned char ucSwitch)
 {
     if (ucSwitch & SW2)
@@ -148,16 +146,15 @@ void GPIO_IF_EnableInterrupt(unsigned char ucSwitch)
     }
 }
 
-//*****************************************************************************
-//
-//!  \brief Disables Push Button GPIO Interrupt
-//!
-//! \param[in] ucSwitch               Push Button Swich Enum - SW2,SW3
-//!
-//! \return none
-//!
-//
-//*****************************************************************************
+/*
+ * Disables push button GPIO interrupt
+ *
+ * \param
+ * ucSwitch: Push Button Swich Enum - SW2,SW3
+ *
+ * \return
+ * none
+ */
 void GPIO_IF_DisableInterrupt(unsigned char ucSwitch)
 {
     if (ucSwitch & SW2)
