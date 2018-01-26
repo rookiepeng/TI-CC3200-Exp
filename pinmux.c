@@ -41,10 +41,10 @@
 //
 //*****************************************************************************
 
-#include <hw_types.h>
-#include <pin.h>
-#include <prcm.h>
-#include <rom_map.h>
+#include "hw_types.h"
+#include "pin.h"
+#include "prcm.h"
+#include "rom_map.h"
 
 #include "pinmux.h"
 

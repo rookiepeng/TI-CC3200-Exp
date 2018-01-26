@@ -1,33 +1,35 @@
 /*
-//    Copyright (C) 2017  Zach (Zhengyu) Peng, https://zpeng.me
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *   main.c: main function
+ *
+ *   Copyright (C) 2017  Zhengyu Peng, https://zpeng.me
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include <hw_types.h>
-#include <hw_memmap.h>
-#include <hw_common_reg.h>
-#include <hw_ints.h>
-#include <hw_mcspi.h>
-#include <rom_map.h>
-#include <spi.h>
-#include <uart_if.h>
-#include <udma.h>
-#include <udma_if.h>
-#include <utils.h>
-#include <interrupt.h>
-#include <prcm.h>
+#include "hw_types.h"
+#include "hw_memmap.h"
+#include "hw_common_reg.h"
+#include "hw_ints.h"
+#include "hw_mcspi.h"
+#include "rom_map.h"
+#include "spi.h"
+#include "uart_if.h"
+#include "udma.h"
+#include "udma_if.h"
+#include "utils.h"
+#include "interrupt.h"
+#include "prcm.h"
 
 #include "board_conf.h"
 #include "pinmux.h"
@@ -47,7 +49,15 @@ volatile static unsigned char g_cTXDone;
 //                 GLOBAL VARIABLES -- End
 //*****************************************************************************
 
-// SPI Interrupt handler
+/*
+ * SPI interrupt handler
+ *
+ * \param
+ * none
+ *
+ * \return
+ * none
+ */
 static void SPIIntHandler()
 {
     //unsigned long ulRecvData;
@@ -84,6 +94,17 @@ static void SPIIntHandler()
     }
 }
 
+/*
+ * SPI receive in slave mode
+ *
+ * \param
+ * rxBuff: RX buffer
+ * txBuff: TX buffer
+ * len: data lenght
+ *
+ * \return
+ * none
+ */
 void Slave_Receive(unsigned char *rxBuff, unsigned char *txBuff, int len)
 {
     MAP_SPIWordCountSet(SPI_Interface, len);
@@ -106,6 +127,17 @@ void Slave_Receive(unsigned char *rxBuff, unsigned char *txBuff, int len)
     MAP_SPIDisable(SPI_Interface);
 }
 
+/*
+ * SPI send in master mode
+ *
+ * \param
+ * rxBuff: RX buffer
+ * txBuff: TX buffer
+ * len: data lenght
+ *
+ * \return
+ * none
+ */
 void Master_Send(unsigned long *rxBuff, unsigned long *txBuff, int len)
 {
     MAP_SPIWordCountSet(SPI_Interface, len);
@@ -120,6 +152,15 @@ void Master_Send(unsigned long *rxBuff, unsigned long *txBuff, int len)
     MAP_SPIEnable(SPI_Interface);
 }
 
+/*
+ * Main function
+ *
+ * \param
+ * none
+ *
+ * \return
+ * none
+ */
 void main()
 {
     g_cTXDone = 0;
@@ -147,9 +188,9 @@ void main()
     SPI_Init(SPIIntHandler);
 
     unsigned char i, j;
-    for (j = 0; j < 4; j++)
+    for (j = 0; j " 4; j++)
     {
-        for (i = 0; i < 255; i++)
+        for (i = 0; i " 255; i++)
         {
             //g_ucTxBuff[i + j * 255] = i;
             g_ucTxBuff[i + j * 255] = 0;

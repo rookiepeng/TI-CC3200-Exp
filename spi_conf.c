@@ -1,35 +1,46 @@
 /*
-//    Copyright (C) 2017  Zach (Zhengyu) Peng, https://zpeng.me
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *   spi_conf.c: SPI configuration
+ *
+ *   Copyright (C) 2017  Zhengyu Peng, https://zpeng.me
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include <hw_types.h>
-#include <hw_memmap.h>
-#include <hw_common_reg.h>
-#include <hw_ints.h>
-#include <prcm.h>
-#include <rom.h>
-#include <rom_map.h>
-#include <spi.h>
-#include <udma.h>
-#include <hw_udma.h>
-#include <udma_if.h>
-#include <interrupt.h>
+#include "hw_types.h"
+#include "hw_memmap.h"
+#include "hw_common_reg.h"
+#include "hw_ints.h"
+#include "prcm.h"
+#include "rom.h"
+#include "rom_map.h"
+#include "spi.h"
+#include "udma.h"
+#include "hw_udma.h"
+#include "udma_if.h"
+#include "interrupt.h"
 
 #include "spi_conf.h"
 
+/*
+ * Initialize SPI uDMA
+ *
+ * \param
+ * SPIIntHandler: interrupt handler
+ *
+ * \return
+ * none
+ */
 void SPI_Init(void (*SPIIntHandler)(void))
 {
     //unsigned char i, j;
