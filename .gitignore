@@ -42,3 +42,5 @@ Debug
 .project
 .cproject
 .ccsproject
+
+.vscode/

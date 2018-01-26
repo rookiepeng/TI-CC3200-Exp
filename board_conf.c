@@ -1,45 +1,45 @@
 /*
-//    board_conf.c
-//
-//    Copyright (C) 2017  Zach (Zhengyu) Peng, https://zpeng.me
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *   board_conf.c: board configuration
+ * 
+ *   Copyright (C) 2017  Zhengyu Peng, https://zpeng.me
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-#include <hw_types.h>
-#include <hw_memmap.h>
-#include <hw_common_reg.h>
-#include <hw_ints.h>
-#include <hw_mcspi.h>
-#include <hw_udma.h>
-#include <rom.h>
-#include <rom_map.h>
-#include <interrupt.h>
-#include <prcm.h>
-#include <gpio.h>
+#include "hw_types.h"
+#include "hw_memmap.h"
+#include "hw_common_reg.h"
+#include "hw_ints.h"
+#include "hw_mcspi.h"
+#include "hw_udma.h"
+#include "rom.h"
+#include "rom_map.h"
+#include "interrupt.h"
+#include "prcm.h"
+#include "gpio.h"
 
 #include "board_conf.h"
 
-//*****************************************************************************
-//
-//! Board Initialization & Configuration
-//!
-//! \param  None
-//!
-//! \return None
-//
-//*****************************************************************************
+/*
+ * Board initialization & configuration
+ *
+ * \param
+ * none
+ *
+ * \return
+ * none
+ */
 void BoardInit(void)
 {
 /* In case of TI-RTOS vector table is initialize by OS itself */
@@ -61,6 +61,16 @@ void BoardInit(void)
     PRCMCC3200MCUInit();
 }
 
+/*
+ * GPIO interrupt initialization
+ *
+ * \param
+ * SW2IntHandler: button 2 interrupt handler
+ * SW3IntHandler: button 3 interrupt handler
+ *
+ * \return
+ * none
+ */
 void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
 {
     // SW3
@@ -104,16 +114,15 @@ void GPIO_IF_Init(void (*SW2IntHandler)(void), void (*SW3IntHandler)(void))
     MAP_GPIOIntEnable(GPIOA2_BASE, GPIO_INT_PIN_6);
 }
 
-//*****************************************************************************
-//
-//!  \brief Enables Push Button GPIO Interrupt
-//!
-//! \param[in] ucSwitch               Push Button Swich Enum - SW2,SW3
-//!
-//! \return none
-//!
-//
-//*****************************************************************************
+/*
+ * Enables Push Button GPIO Interrupt
+ *
+ * \param
+ * ucSwitch: Push Button Swich Enum - SW2,SW3
+ *
+ * \return
+ * none
+ */
 void GPIO_IF_EnableInterrupt(unsigned char ucSwitch)
 {
     if (ucSwitch & SW2)
@@ -135,16 +144,15 @@ void GPIO_IF_EnableInterrupt(unsigned char ucSwitch)
     }
 }
 
-//*****************************************************************************
-//
-//!  \brief Disables Push Button GPIO Interrupt
-//!
-//! \param[in] ucSwitch               Push Button Swich Enum - SW2,SW3
-//!
-//! \return none
-//!
-//
-//*****************************************************************************
+/*
+ * Disables Push Button GPIO Interrupt
+ *
+ * \param
+ * ucSwitch: Push Button Swich Enum - SW2,SW3
+ *
+ * \return
+ * none
+ */
 void GPIO_IF_DisableInterrupt(unsigned char ucSwitch)
 {
     if (ucSwitch & SW2)

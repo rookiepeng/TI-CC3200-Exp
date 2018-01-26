@@ -41,13 +41,13 @@
 //
 //*****************************************************************************
 
-#include <hw_types.h>
-#include <pin.h>
-#include <prcm.h>
-#include <rom_map.h>
-#include <gpio.h>
-#include <hw_gpio.h>
-#include <hw_memmap.h>
+#include "hw_types.h"
+#include "pin.h"
+#include "prcm.h"
+#include "rom_map.h"
+#include "gpio.h"
+#include "hw_gpio.h"
+#include "hw_memmap.h"
 
 #include "pinmux.h"
 
